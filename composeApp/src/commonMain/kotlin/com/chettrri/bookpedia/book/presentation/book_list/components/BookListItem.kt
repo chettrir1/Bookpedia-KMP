@@ -74,7 +74,7 @@ fun BookListItem(
                         if (it.painter.intrinsicSize.width > 1 && it.painter.intrinsicSize.height > 1) {
                             Result.success(it.painter)
                         } else {
-                            Result.failure(Exception(message = "Invalid image size"))
+                            Result.failure(Throwable("Invalid Image"))
                         }
                     },
                     onError = {
