@@ -58,7 +58,9 @@ fun BookListItem(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
-                .height(IntrinsicSize.Min)
+                .height(IntrinsicSize.Min),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -74,7 +76,7 @@ fun BookListItem(
                         if (it.painter.intrinsicSize.width > 1 && it.painter.intrinsicSize.height > 1) {
                             Result.success(it.painter)
                         } else {
-                            Result.failure(Exception(message = "Invalid image size"))
+                            Result.failure(Throwable("Invalid Image"))
                         }
                     },
                     onError = {
