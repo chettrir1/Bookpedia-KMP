@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpedia_cmp.composeapp.generated.resources.Res
 import bookpedia_cmp.composeapp.generated.resources.favorites
+import bookpedia_cmp.composeapp.generated.resources.no_favorite_book
 import bookpedia_cmp.composeapp.generated.resources.no_search_results
 import bookpedia_cmp.composeapp.generated.resources.search_results
 import com.chettrri.bookpedia.book.domain.Book
@@ -73,9 +74,18 @@ fun BookListScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val pagerState = rememberPagerState { 2 }
     val searchResultsListState = rememberLazyListState()
+    val favoriteBooksListState = rememberLazyListState()
 
     LaunchedEffect(state.searchResults) {
         searchResultsListState.animateScrollToItem(0)
+    }
+
+    LaunchedEffect(state.selectedTabIndex) {
+        pagerState.animateScrollToPage(state.selectedTabIndex)
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        onAction(BookListAction.OnTabSelected(pagerState.currentPage))
     }
 
     Column(
@@ -203,7 +213,6 @@ fun BookListScreen(
                                                 modifier = Modifier
                                                     .fillMaxSize(),
                                                 scrollState = searchResultsListState
-
                                             )
                                         }
                                     }
@@ -212,6 +221,22 @@ fun BookListScreen(
                             }
 
                             1 -> {
+                                if (state.favoriteBooks.isEmpty()) {
+                                    Text(
+                                        text = stringResource(Res.string.no_favorite_book),
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.headlineSmall
+                                    )
+                                } else {
+                                    BookList(
+                                        books = state.favoriteBooks,
+                                        onBookClick = {
+                                            onAction(BookListAction.OnBookClick(it))
+                                        },
+                                        modifier = Modifier.fillMaxSize(),
+                                        scrollState = favoriteBooksListState
+                                    )
+                                }
 
                             }
                         }
