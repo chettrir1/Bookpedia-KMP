@@ -1,6 +1,7 @@
 package com.chettrri.bookpedia.book.presentation.book_detail
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -37,6 +38,9 @@ fun BookDetailScreen(state: BookDetailState, onAction: (BookDetailAction) -> Uni
             onAction(BookDetailAction.OnBackClicked)
         },
         modifier = Modifier.fillMaxSize(),
-        content = {}
-    )
+    ) {
+        Text(
+            text = state.book?.title?:""
+        )
+    }
 }
