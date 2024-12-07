@@ -1,3 +1,5 @@
+@file:OptIn(FlowPreview::class)
+
 package com.chettrri.bookpedia.book.presentation.book_list
 
 import androidx.lifecycle.ViewModel
@@ -21,7 +23,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-@FlowPreview
 class BookListViewModel(private val repository: BookRepository) : ViewModel() {
     private var cachedBooks: List<Book> = emptyList()
     private var searchJob: Job? = null
