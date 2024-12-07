@@ -7,6 +7,7 @@ import com.chettrri.bookpedia.book.data.network.KtorRemoteBookDataSource
 import com.chettrri.bookpedia.book.data.network.RemoteBookDataSource
 import com.chettrri.bookpedia.book.data.repository.DefaultBookRepository
 import com.chettrri.bookpedia.book.domain.BookRepository
+import com.chettrri.bookpedia.book.presentation.SelectedBookViewModel
 import com.chettrri.bookpedia.book.presentation.book_list.BookListViewModel
 import com.chettrri.bookpedia.core.data.HttpClientFactory
 import kotlinx.coroutines.FlowPreview
@@ -28,4 +29,6 @@ val sharedModule = module {
     singleOf(::DefaultBookRepository).bind<BookRepository>()
 
     viewModelOf(::BookListViewModel)
+    viewModelOf(::SelectedBookViewModel)
+
 }
