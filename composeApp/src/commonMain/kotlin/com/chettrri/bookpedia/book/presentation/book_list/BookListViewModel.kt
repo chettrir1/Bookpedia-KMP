@@ -26,12 +26,14 @@ import kotlinx.coroutines.launch
 class BookListViewModel(private val repository: BookRepository) : ViewModel() {
     private var cachedBooks: List<Book> = emptyList()
     private var searchJob: Job? = null
+    private var observeFavoriteBookJob: Job? = null
     private val _state = MutableStateFlow(BookListState())
     val state = _state
         .onStart {
             if (cachedBooks.isEmpty()) {
                 observeSearchQuery()
             }
+            observeFavoriteBooks()
         }
         .stateIn(
             viewModelScope,
@@ -81,6 +83,20 @@ class BookListViewModel(private val repository: BookRepository) : ViewModel() {
                     }
                 }
             }.launchIn(viewModelScope)
+    }
+
+    private fun observeFavoriteBooks() {
+        observeFavoriteBookJob?.cancel()
+        observeFavoriteBookJob = repository
+            .getFavoriteBooks()
+            .onEach { favoriteBooks ->
+                _state.update {
+                    it.copy(
+                        favoriteBooks = favoriteBooks
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun searchBooks(query: String) =

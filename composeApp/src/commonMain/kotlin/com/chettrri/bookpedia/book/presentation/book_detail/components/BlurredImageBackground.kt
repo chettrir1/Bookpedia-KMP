@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.CardDefaults
@@ -79,7 +80,7 @@ fun BlurredImageBackground(
 
     Box {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
         ) {
             Box(
@@ -177,7 +178,7 @@ fun BlurredImageBackground(
                                         )
                                 ) {
                                     Icon(
-                                        imageVector = if (isFavorite) Icons.Filled.FavoriteBorder else Icons.Outlined.FavoriteBorder,
+                                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                                         tint = Color.Red,
                                         contentDescription = if (isFavorite) stringResource(Res.string.remove_from_favorite) else stringResource(
                                             Res.string.mark_as_favorite

@@ -41,3 +41,20 @@ fun Book.toBookEntity(): BookEntity {
         editionCount = numEditions
     )
 }
+
+//mapper to map from entity to domain model
+fun BookEntity.toBook(): Book {
+    return Book(
+        id = id,
+        title = title,
+        description = description,
+        imageUrl = imageUrl,
+        languages = languages,
+        authors = authors,
+        firstPublishYear = firstPublishYear,
+        averageRating = ratingsAverage,
+        ratingCount = ratingsCount,
+        numPages = numberOfPagesMedian,
+        numEditions = editionCount
+    )
+}
