@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.CardDefaults
@@ -45,6 +47,7 @@ import bookpedia_cmp.composeapp.generated.resources.remove_from_favorite
 import coil3.compose.rememberAsyncImagePainter
 import com.chettrri.bookpedia.core.presentation.DarkBlue
 import com.chettrri.bookpedia.core.presentation.DesertWhite
+import com.chettrri.bookpedia.core.presentation.PulseAnimation
 import com.chettrri.bookpedia.core.presentation.SandYellow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -79,7 +82,7 @@ fun BlurredImageBackground(
 
     Box {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
         ) {
             Box(
@@ -146,7 +149,9 @@ fun BlurredImageBackground(
                     targetState = imageLoadResult
                 ) { result ->
                     when (result) {
-                        null -> CircularProgressIndicator()
+                        null -> PulseAnimation(
+                            modifier = Modifier.size(60.dp)
+                        )
                         else -> {
                             Box {
                                 Image(
@@ -177,7 +182,7 @@ fun BlurredImageBackground(
                                         )
                                 ) {
                                     Icon(
-                                        imageVector = if (isFavorite) Icons.Filled.FavoriteBorder else Icons.Outlined.FavoriteBorder,
+                                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                                         tint = Color.Red,
                                         contentDescription = if (isFavorite) stringResource(Res.string.remove_from_favorite) else stringResource(
                                             Res.string.mark_as_favorite

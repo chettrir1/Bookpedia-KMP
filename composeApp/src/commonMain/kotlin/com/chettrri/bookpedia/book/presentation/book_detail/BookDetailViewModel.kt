@@ -9,6 +9,8 @@ import com.chettrri.bookpedia.book.domain.BookRepository
 import com.chettrri.bookpedia.core.domain.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -18,10 +20,13 @@ class BookDetailViewModel(
     private val bookRepository: BookRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val bookId = savedStateHandle.toRoute<Routes.BookDetail>().bookId
+    private val bookId = savedStateHandle.toRoute<Routes.BookDetail>().bookId
     private val _state = MutableStateFlow(BookDetailState())
     val state = _state
-        .onStart { fetchBookDescription() }
+        .onStart {
+            fetchBookDescription()
+            observeFavoriteStatus()
+        }
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),
@@ -40,11 +45,32 @@ class BookDetailViewModel(
             }
 
             is BookDetailAction.OnFavoriteClicked -> {
-
+                viewModelScope.launch {
+                    if (state.value.isFavorite) {
+                        bookRepository.deleteFromFavorites(bookId)
+                    } else {
+                        state.value.book?.let { book ->
+                            bookRepository.markAsFavorite(book)
+                        }
+                    }
+                }
             }
 
             else -> Unit
         }
+    }
+
+    private fun observeFavoriteStatus() {
+        bookRepository
+            .isBookFavorite(bookId)
+            .onEach { isFavorite ->
+                _state.update {
+                    it.copy(
+                        isFavorite = isFavorite
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun fetchBookDescription() {
